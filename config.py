@@ -12,4 +12,5 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'not-set')
 SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', "postgresql://postgres:password@localhost:5432/exercises")
 
 #SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/exercises"
+
 #SQLALCHEMY_TRACK_MODIFICATIONS = False
