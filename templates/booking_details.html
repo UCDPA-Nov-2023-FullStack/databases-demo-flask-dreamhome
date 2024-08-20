@@ -1,0 +1,15 @@
+{% set title = "Booking Details" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <table>
+            <tr><td>Member Name:</td><td>{{ member.firstname }} {{ member.surname }}</td></tr>
+            <tr><td>Facility Name:</td><td>{{ facility.name }}</td></tr>
+            <tr><td>Starttime:</td><td>{{ booking.starttime }}</td></tr>
+            <tr><td>Slots:</td><td>{{ booking.slots }}</td></tr>
+            <tr><td></td><td><a href="{{ url_for('booking_edit', book_id=booking.bookid) }}"><button>Edit</button></a></td></tr>
+            <tr><td></td><td><a href="{{ url_for('booking_delete_action', book_id=booking.bookid) }}"><button>Delete</button></a></td></tr>
+        </table>
+    </div>
+{% endblock %}

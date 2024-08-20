@@ -1,0 +1,25 @@
+{% set title = "Create a Booking" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- [html-validate-disable attribute-allowed-values] -->
+    <form action="{{ url_for('create_booking_action') }}" method="POST">
+        <select name="member" required>
+            <option value="">Select a member name</option>
+            {% for member in members%}
+            <option value="{{ member.memid }}">{{ member.firstname }} {{ member.surname }}</option>
+            {% endfor %}
+        </select>
+        <select name="facility" required>
+            <option value="">Select a facility</option>
+            {% for facility in facilities %}
+            <option value="{{ facility.facid }}">{{ facility.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="startime">Start time:</label>
+        <input type="datetime-local" id="starttime" name="starttime" required>
+        <label for="slots">30 minute Slots (between 1 and 2):</label>
+        <input type="number" id="slots" name="slots" min="1" max="2" required>
+        <button type="submit">Create Booking</button>
+    </form>
+{% endblock %}

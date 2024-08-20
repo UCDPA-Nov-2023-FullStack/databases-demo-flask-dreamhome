@@ -1,0 +1,11 @@
+{% set title = "Facilities" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <table>
+        {% for facility in facilities %}
+            <tr><td>{{ facility.name }}</td><td><a href="{{ url_for('facility_details', fac_id=facility.facid) }}">View Details</a></td></tr>
+        {% endfor %}
+    </table>
+    <!--<div class="container blog-posts"></div>-->
+{% endblock %}

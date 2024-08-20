@@ -1,0 +1,31 @@
+{% set title = "Edit a Booking" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- [html-validate-disable attribute-allowed-values] -->
+    <form action="{{ url_for('edit_booking_action', book_id=booking.bookid) }}" method="POST">
+        <select name="member" required>
+            <option value="">Select a member name</option>
+            {% for member in members %}
+            <option value="{{ member.memid }}"
+                {{ ' selected' if member.memid == booking.memid else '' }}
+                >{{ member.firstname }} {{ member.surname }}
+            </option>
+            {% endfor %}
+        </select>
+        <select name="facility" required>
+            <option value="">Select a facility</option>
+            {% for facility in facilities %}
+            <option value="{{ facility.facid }}"
+                {{ ' selected' if facility.facid == booking.facid else '' }}
+                >{{ facility.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="startime">Start time:</label>
+        <input type="datetime-local" id="starttime" name="starttime" value="{{ booking.starttime }}" required>
+        <label for="slots">30 minute Slots (between 1 and 2):</label>
+        <input type="number" id="slots" name="slots" value="{{ booking.slots }}" min="1" max="2" required>
+        <input type="hidden" name="book_id" value="{{ booking.bookid}}">
+        <button type="submit">Update Booking</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% set title = "Members" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <table>
+            <tr><td>Name:</td><td>{{ member.firstname }} {{ member.surname }}</td></tr>
+            <tr><td>Phone Number:</td><td>{{ member.telephone }}</td></tr>
+            <tr><td>Address:</td><td>{{ member.address }}</td></tr>
+            <tr><td>Zip code:</td><td>{{ member.zipcode }}</td></tr>
+            <tr><td>Join date:</td><td>{{ member.joindate }}</td></tr>
+        </table>
+    </div>
+{% endblock %}

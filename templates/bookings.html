@@ -1,0 +1,16 @@
+{% set title = "Bookings" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{{ url_for('search_bookings') }}" method="GET">
+        <input type="search" id="querybookings" name="q" required>
+        <button type="submit">Search Bookings</button>
+    </form>
+    <ul>
+        {% for booking in bookings %}
+            <li><a href="{{ url_for('booking_details', book_id=booking.bookid) }}">
+                {{ booking.firstname }} {{ booking.surname }} {{ booking.starttime }} {{ booking.slots }}</a></li>
+        {% endfor %}
+    </ul>
+    <!--<div class="container blog-posts"></div>-->
+{% endblock %}

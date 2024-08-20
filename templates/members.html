@@ -1,0 +1,11 @@
+{% set title = "Members" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <table>
+        {% for member in members %}
+            <tr><td>{{ member.firstname }} {{ member.surname }}</td><td>{{ member.telephone }}</td><td><a href="{{ url_for('member_details', mem_id=member.memid) }}">View Details</a></td></tr>
+        {% endfor %}
+    </table>
+    <!--<div class="container blog-posts"></div>-->
+{% endblock %}

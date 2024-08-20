@@ -1,0 +1,14 @@
+{% set title = "Facilities" %}
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <table>
+            <tr><td>Name:</td><td>{{ facility.name }}</td></tr>
+            <tr><td>Member Cost:</td><td>{{ facility.membercost }}</td></tr>
+            <tr><td>Guest Cost:</td><td>{{ facility.guestcost }}</td></tr>
+            <tr><td>Initial Outlay:</td><td>{{ facility.initialoutlay }}</td></tr>
+            <tr><td>Monthly Maintenance:</td><td>{{ facility.monthlymaintenance }}</td></tr>
+        </table>
+    </div>
+{% endblock %}
