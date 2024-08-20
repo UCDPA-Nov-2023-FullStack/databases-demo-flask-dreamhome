@@ -7,5 +7,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'not-set')
 
 # When deploying, set in the environment to the PostgreSQL URL
 #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/exercises"
+
+# When deploying, set in the environment to the PostgreSQL URL
+SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', "postgresql://postgres:password@localhost:5432/exercises")
+
+#SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/exercises"
 #SQLALCHEMY_TRACK_MODIFICATIONS = False
