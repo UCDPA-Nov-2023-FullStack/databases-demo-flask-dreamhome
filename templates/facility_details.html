@@ -11,4 +11,11 @@
             <tr><td>Monthly Maintenance:</td><td>{{ facility.monthlymaintenance }}</td></tr>
         </table>
     </div>
+    <h2>Bookings</h2>
+    <ul>
+        {% for booking in facility.bookings %}
+            <li><a href="{{ url_for('booking_details', book_id=booking.bookid) }}">
+                {{ booking.starttime }} - {{ booking.member.firstname }} {{ booking.member.surname }} - {{ booking.slots }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}

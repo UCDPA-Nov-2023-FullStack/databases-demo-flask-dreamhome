@@ -1,4 +1,4 @@
-{% set title = "Members" %}
+{% set title = "Member Details" %}
 {% extends 'base.html' %}
 
 {% block content %}
@@ -11,4 +11,11 @@
             <tr><td>Join date:</td><td>{{ member.joindate }}</td></tr>
         </table>
     </div>
+    <h2>Bookings</h2>
+    <ul>
+        {% for booking in member.bookings %}
+            <li><a href="{{ url_for('booking_details', book_id=booking.bookid) }}">
+                {{ booking.starttime }} - {{ booking.facility.name }} - {{ booking.slots }}</a></li>
+        {% endfor %}
+    </ul>
 {% endblock %}

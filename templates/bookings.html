@@ -3,14 +3,48 @@
 
 {% block content %}
     <form action="{{ url_for('search_bookings') }}" method="GET">
-        <input type="search" id="querybookings" name="q" required>
+        <input type="search" id="querybookings" name="q" placeholder="Search..." required
+            value="{{ query if query != None else '' }}">
         <button type="submit">Search Bookings</button>
     </form>
     <ul>
-        {% for booking in bookings %}
+        {% for booking in pagination.items %}
             <li><a href="{{ url_for('booking_details', book_id=booking.bookid) }}">
-                {{ booking.firstname }} {{ booking.surname }} {{ booking.starttime }} {{ booking.slots }}</a></li>
+                {{ booking.member.firstname }} {{ booking.member.surname }} {{ booking.starttime }} {{ booking.slots }}
+                </a>
+                {{ booking.facility.name }}
+            </li>
         {% endfor %}
     </ul>
-    <!--<div class="container blog-posts"></div>-->
+    <div class="pagination">
+        {% if pagination.has_prev %}
+            <span>
+                <a class='page-number' href="{{ url_for('bookings', page=pagination.prev_num, q=query) }}">
+                    {{ '<<<' }}
+                </a>
+            </span>
+        {% endif %}
+    
+        {% for number in pagination.iter_pages() %}
+            {% if pagination.page != number %}
+                <span>
+                        <a class='page-number'
+                            href="{{ url_for('bookings', page=number, q=query) }}">
+                        {{ number }}
+                        </a>
+                </span>
+            {% else %}
+                <span class='current-page-number'>{{ number }}</span>
+            {% endif %}
+        {% endfor %}
+    
+        {% if pagination.has_next %}
+            <span>
+                <a class='page-number'
+                    href="{{ url_for('bookings', page=pagination.next_num, q=query) }}">
+                    {{ '>>>' }}
+                </a>
+            </span>
+        {% endif %}
+    </div>
 {% endblock %}

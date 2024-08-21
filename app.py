@@ -6,9 +6,9 @@ https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/legacy-query/
 from statistics import median, mean
 
 from flask import Flask, render_template, redirect, request, url_for
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 
-from models import Bookings, Members, Facilities, db
+from models import Booking, Member, Facility, db
 
 app = Flask(__name__)
 app.config.from_object('config')  # Load configuration from config.py and particularly the DBMS URI
@@ -22,31 +22,41 @@ with app.app_context():
 @app.route("/")
 @app.route("/bookings")
 def bookings():
-    bookings = Bookings.get_bookings()
-    #print(bookings[:5])
-    #return render_template("bookings.html", bookings=Bookings.query.order_by(desc(Bookings.starttime)).all())
-    return render_template("bookings.html", bookings=bookings)
+    # option 1 - using SQL and static method on Booking class
+    #bookings = Booking.get_bookings()
+    #return render_template("bookings.html", bookings=bookings)
+    # option 2 - query() and all()
+    #return render_template("bookings.html", bookings=Booking.query.order_by(desc(Booking.starttime)).all())
+    # option 3 - pagination
+    page = request.args.get('page', 1, type=int)
+    pagination = Booking.query.order_by(desc(Booking.starttime)).paginate(page=page, per_page=12)
+    return render_template("bookings.html", pagination=pagination)
 
 @app.route("/bookings/search", methods=['GET'])
 def search_bookings():
-    print(request.form)
-    bookings = Bookings.get_bookings()
-    return render_template("bookings.html", bookings=bookings)
-  
+    query = request.args.get('q')
+    #bookings = Booking.query.filter(Booking.facility.name.like(f'%{query}%')).all()
+    #bookings = db.session.query(Booking).join(Facility).join(Member).filter(
+    #    or_(Facility.name.ilike(f'%{query}%'), Member.firstname.ilike(f'%{query}%'), Member.surname.ilike(f'%{query}%'))).all()
+    #return render_template("bookings.html", bookings=bookings, query=query)
+
+    page = request.args.get('page', 1, type=int)
+    pagination = db.session.query(Booking).join(Facility).join(Member).filter(
+        or_(Facility.name.ilike(f'%{query}%'), Member.firstname.ilike(f'%{query}%'), Member.surname.ilike(f'%{query}%'))).paginate(page=page, per_page=12)
+    return render_template("bookings.html", pagination=pagination, query=query)
+
 @app.route("/bookings/<int:book_id>")
 def booking_details(book_id):
-    booking = Bookings.query.get_or_404(book_id)
-    member = Members.query.get(booking.memid)
-    facility = Facilities.query.get(booking.facid)
-    return render_template("booking_details.html", booking=booking, member=member, facility=facility)
+    booking = Booking.query.get_or_404(book_id)
+    return render_template("booking_details.html", booking=booking)
 
 @app.route("/bookings/create", methods=["GET"])
 def create_booking():
-    return render_template("create_booking.html", members=Members.query.all(), facilities=Facilities.query.all())
+    return render_template("create_booking.html", members=Member.query.all(), facilities=Facility.query.all())
 
 @app.route("/bookings/create", methods=["POST"])
 def create_booking_action():
-    booking = Bookings(
+    booking = Booking(
         memid = request.form['member'],
         facid = request.form['facility'],
         starttime = request.form['starttime'],
@@ -59,15 +69,15 @@ def create_booking_action():
 
 @app.route("/bookings/<int:book_id>/edit", methods=["GET"])
 def booking_edit(book_id):
-    booking = Bookings.query.get_or_404(book_id)
-    members = Members.query.all()
-    facilities = Facilities.query.all()
+    booking = Booking.query.get_or_404(book_id)
+    members = Member.query.all()
+    facilities = Facility.query.all()
     return render_template("edit_booking.html", booking=booking, members=members, facilities=facilities)
 
 @app.route("/bookings/<int:book_id>/edit", methods=["POST"])
 def edit_booking_action(book_id):
     #bookid = request.form['book_id']
-    booking = Bookings.query.get(book_id)
+    booking = Booking.query.get(book_id)
     booking.memid = request.form['member'],
     booking.facid = request.form['facility'],
     booking.starttime = request.form['starttime'],
@@ -79,7 +89,7 @@ def edit_booking_action(book_id):
 
 @app.route("/bookings/<int:book_id>/delete", methods=["GET"])
 def booking_delete_action(book_id):
-    booking = Bookings.query.get(book_id)
+    booking = Booking.query.get(book_id)
     db.session.delete(booking)
     db.session.commit()
 
@@ -88,22 +98,22 @@ def booking_delete_action(book_id):
 # members routes
 @app.route("/members")
 def members():
-    return render_template("members.html", members=Members.query.all())
+    return render_template("members.html", members=Member.query.all())
 
 @app.route("/members/<int:mem_id>")
 def member_details(mem_id):
-    member = Members.query.get_or_404(mem_id)
+    member = Member.query.get_or_404(mem_id)
     return render_template("member_details.html", member=member)
 
 
 # facilities routes
 @app.route("/facilities")
 def facilities():
-    return render_template("facilities.html", facilities=Facilities.query.all())
+    return render_template("facilities.html", facilities=Facility.query.all())
 
 @app.route("/facilities/<int:fac_id>")
 def facility_details(fac_id):
-    facility = Facilities.query.get_or_404(fac_id)
+    facility = Facility.query.get_or_404(fac_id)
     return render_template("facility_details.html", facility=facility)
 
 

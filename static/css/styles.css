@@ -178,6 +178,27 @@ button[type="submit"].danger:hover {
   background-color: #a13b45;
 }
 
+/* Pagination Styles */
+
+.pagination {
+  margin: 0 auto;
+}
+
+.pagination span {
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.page-number {
+  
+  padding: 5px;
+  text-decoration: none;
+}
+
+.current-page-number {
+  color: #666
+}
+
 /* Responsive Styles */
 
 @media (max-width: 768px) {
